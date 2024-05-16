@@ -1,29 +1,33 @@
 import constants 
-from model import BERTForClassification, load_pretrained_model, load_pretrained_tokenizer, train
-from classifier import TextClassifier
-from preprocess import preprocess_data
+from model import BERTForClassification
+from preprocess import preprocess_data, load_or_preprocess_corpus
 
 from pathlib import Path
-
 import pickle
 
 if __name__ == "__main__":
     
-    try:
-        with open("corpus.pickle", "rb") as f:
-            corpus=pickle.load(f)
-            print("Loaded corpus successfully")
 
-        with open("label.pickle", "rb") as f:
-            labels= pickle.load(f)
-            print("Loaded labels successfully")
-    except:
-        print("Some Error encountered.")
+    # Access params from the constants.py file
+    filepath        = constants.DATA_PATH
+    corpus_dir      = constants.CORPUS_DIR
+    num_examples    = constants.NUM_EXAMPLES
+    params          = constants.PARAMS
 
-    # Classify and Train
-    classifier = BERTForClassification()
-    history = train(classifier, corpus[:constants.NUM_EXAMPLES], labels[:constants.NUM_EXAMPLES])
+    """Check for the preprocessed corpus of tweets and their correponding labels. If the corpus is already
+    saved in the pickle format, access it, otherwise run the preprocessing for the cleaning of tweets and
+    extraction of labels.
+    """
+    preprocessed_corpus, sentiment_labels = load_or_preprocess_corpus(corpus_dir, preprocess_data, filepath, num_examples)
+    
+    """ Instantiate the BERT-based classifier object from the `BERTForClassification` class. Use hyperparams 
+    as input parameters involved in building, compiling and training the classifier.
+    """
+    classifier = BERTForClassification(params)
+    history = classifier.train(preprocessed_corpus, sentiment_labels)
+    classifier.save_model_weights()
 
+    
     
 
     
