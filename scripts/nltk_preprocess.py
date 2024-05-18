@@ -22,13 +22,24 @@ from pathlib import Path
 
 def preProcess(filepath, num_examples, shuffle_flag=True):
     """
-    
+    Preprocesses a CSV sentiment dataset file.
+
+    Args:
+        filepath (str): Path to the CSV file containing sentiment data.
+        num_examples (int): Number of examples to load from the dataset.
+        shuffle_flag (bool, optional): Flag indicating whether to shuffle the data. Defaults to True.
+
+    Returns:
+        list, list: A list of preprocessed messages and a list of corresponding sentiment labels.
     """
     # Load the CSV dataset to read the content of the data file
     data = pd.read_csv(filepath, header=None, sep = ',', encoding='latin-1', engine='python')
+    
+    # Shuffle the dataset to include both kinds of labels.
     if shuffle_flag:
-        ""
         data = shuffle(data)
+
+    # Extract the rows upto `num_examples`    
     data = data[:num_examples]
     logging.info("Data loaded successfully from path: %s. Found %d rows.", filepath, len(data))
 
@@ -45,6 +56,14 @@ def preProcess(filepath, num_examples, shuffle_flag=True):
     # Tweet Cleaning:
     """
     Steps:
+    1. ** Lowercase conversion. **
+    2. ** Remove username of any kind from the tweets. **
+    3. ** Remove hashtags of any kind from the tweets. **
+    4. ** Remove URLs that start with www, http:// or https://. **
+    5. ** Remove all the punctuations and replace it with None. **
+    6. ** Use the lemmantizer method to have a common verb form for all the non-stopwords. **
+    7. ** Convert the message columns and sentiment labels in the form of lists. **
+
     """
     lemmatizer = WordNetLemmatizer()
     stop_words = set(stopwords.words('english'))
