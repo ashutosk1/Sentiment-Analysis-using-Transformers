@@ -1,13 +1,10 @@
 import constants 
 from model import BERTForClassification
-from preprocess import preprocess_data, load_or_preprocess_corpus
+from nltk_preprocess import load_or_preprocess_corpus
 
-from pathlib import Path
-import pickle
+
 
 if __name__ == "__main__":
-    
-
     # Access params from the constants.py file
     filepath        = constants.DATA_PATH
     corpus_dir      = constants.CORPUS_DIR
@@ -18,8 +15,8 @@ if __name__ == "__main__":
     saved in the pickle format, access it, otherwise run the preprocessing for the cleaning of tweets and
     extraction of labels.
     """
-    preprocessed_corpus, sentiment_labels = load_or_preprocess_corpus(corpus_dir, preprocess_data, filepath, num_examples)
-    
+        
+    preprocessed_corpus, sentiment_labels =  load_or_preprocess_corpus(filepath, corpus_dir, num_examples, shuffle_flag=True)
     """ Instantiate the BERT-based classifier object from the `BERTForClassification` class. Use hyperparams 
     as input parameters involved in building, compiling and training the classifier.
     """
@@ -28,7 +25,5 @@ if __name__ == "__main__":
     classifier.save_model_weights()
 
     
-    
-
     
     

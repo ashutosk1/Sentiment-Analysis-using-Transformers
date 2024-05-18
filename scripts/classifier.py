@@ -47,8 +47,5 @@ class TextClassifier:
                     filtered_word = filtered_word.replace(curr_char, (" " + LIST_OF_REPLACED_LETTERS[curr_char]), 1)
                 filtered_word = filtered_word.replace(curr_char, "", 1)
         return filtered_word
-    
-
-    
 
 

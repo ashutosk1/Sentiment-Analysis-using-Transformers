@@ -16,8 +16,8 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-
-
+from nltk.stem import WordNetLemmatizer
+lemmatizer = WordNetLemmatizer()
 
 
 def preprocess_data(filepath, num_examples):
@@ -42,7 +42,8 @@ def preprocess_data(filepath, num_examples):
     # Mapping the labels of Sentiments in a binary form with '0' for negative and '1' for positive.
     sentiment_label_conversion = {0:0, 4:1}
     data["sentiment"]= data["sentiment"].map(sentiment_label_conversion)
-
+    print("Printing from the Traditional preprocessor")
+    print(data["message"].head())
     # Extracting the Corpus and Sentiment Labels
     corpus= list(data.message)
     sentiment= list(data.sentiment)
@@ -79,6 +80,7 @@ def preprocess_text(text):
     """
 
     words = text.split(" ")
+
     messages=""
     text_classifer= TextClassifier()
     
@@ -92,6 +94,8 @@ def preprocess_text(text):
             # if the word is not in stopwords' set
             if word.lower() not in (set(STOPWORDS) - constants.LIST_OF_SENTIMENT_RELEVANT_STOPWORDS) and len(words)>1:
 
+                word = lemmatizer.lemmatize(word)
+
                 if text_classifer.is_emoji_not_punctuation(word):
                     word=constants.LIST_OF_EMOJIS[word]
 
@@ -99,7 +103,7 @@ def preprocess_text(text):
                     word="url"
 
                 if text_classifer.is_username(word.lower()):
-                    word="usermention"
+                    word="user"
 
                 messages+=(text_classifer.filter_punctuation(word.lower()).strip()+ " ")
 

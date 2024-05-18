@@ -71,11 +71,11 @@ LIST_OF_REPLACED_LETTERS = {
 
 
 # PATHS
-DATA_PATH = "./SENTIMENT140_DATA_DIR/training.1600000.processed.noemoticon.csv"
-CORPUS_DIR = "./CORPUS_DATA_DIR"
+DATA_PATH = "../SENTIMENT140_DATA_DIR/training.1600000.processed.noemoticon.csv"
+CORPUS_DIR = "../CORPUS_DATA_DIR_NLTK"
 
 
-NUM_EXAMPLES = 1000
+NUM_EXAMPLES = 100000
 # MODEL PARAMS
 PARAMS = { 
     "TEST_SIZE"       : 0.20,
@@ -85,5 +85,5 @@ PARAMS = {
     "LEARNING_RATE"   : 1e-5,
     "NUM_CLASSES"     : 2,
     "MODEL_NAME"      : "bert-base-uncased",
-    "MODEL_DIR"       : "./MODEL_DIR"
+    "MODEL_DIR"       : "../MODEL_DIR"
 }
