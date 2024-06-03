@@ -93,7 +93,11 @@ def preProcess(filepath, num_examples, shuffle_flag=True):
     data["message"] = data["message"].apply(lambda text: remove_username(text))
     data["message"] = data["message"].apply(lambda text: remove_hashtags(text))
     data["message"] = data["message"].apply(lambda text: remove_url(text))
-    data["message"] = data["message"].apply(lambda text: get_filtered_tokens(text))
+    #data["message"] = data["message"].apply(lambda text: get_filtered_tokens(text))
+    lemmatizer = WordNetLemmatizer()
+    stop_words = stop_words = set(stopwords.words('english')) -{"no"}
+    data["message"] = data["message"].apply(lambda x: " ".join([lemmatizer.lemmatize(word) for word in x.split()\
+                                                                                if word not in stop_words]))
     return data["message"].tolist(), data["sentiment"].tolist()
 
     

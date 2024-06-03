@@ -53,14 +53,14 @@ class BERTForClassification(tf.keras.Model):
             tf.Tensor: Model output logits
         """
 
-        x = self.bert(inputs)[1]  # Extract the output from the second layer (sequence embedding)
+        x = self.bert(inputs)[0][:, 0, :]  # Extract the output from the second layer (sequence embedding)
         
         # Classification head for multi-class classification
-        x = self.dense1(x)
-        #x = self.dropout1(x)
-        x = self.dense2(x)
-        #x = self.dropout2(x)
-        x = self.dense3(x)
+        # x = self.dense1(x)
+        # x = self.dropout1(x)
+        # x = self.dense2(x)
+        # x = self.dropout2(x)
+        #x = self.dense3(x)
         #x = self.dropout3(x)
         outputs = self.output_layer(x)
         return outputs

@@ -27,11 +27,11 @@ def main():
     """ Instantiate the BERT-based classifier object from the `BERTForClassification` class. Use hyperparams 
     as input parameters involved in building, compiling and training the classifier.
     """
-    # classifier = BERTForClassification(params)
-    # history = classifier.train(preprocessed_corpus, sentiment_labels)
-    # classifier.save_model_weights()
+    classifier = BERTForClassification(params)
+    history = classifier.train(preprocessed_corpus, sentiment_labels)
+    classifier.save_model_weights()
 
-    lstm_model.train(preprocessed_corpus, sentiment_labels)
+    #lstm_model.train(preprocessed_corpus, sentiment_labels)
 
 if __name__ =="__main__":
     main()
