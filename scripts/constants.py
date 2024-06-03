@@ -1,6 +1,6 @@
 # PATHS
-DATA_PATH = "../SENTIMENT140_DATA_DIR/training.1600000.processed.noemoticon.csv"
-CORPUS_DIR = "../CORPUS_DATA_DIR"
+DATA_PATH = "/content/drive/MyDrive/Sentiment140/training.1600000.processed.noemoticon.csv"
+CORPUS_DIR = "/content/drive/MyDrive/Sentiment140/CORPUS_DATA_DIR_LSTM"
 
 
 NUM_EXAMPLES = 100000
