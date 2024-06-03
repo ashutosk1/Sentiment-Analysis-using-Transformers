@@ -13,8 +13,6 @@ import datetime
 import os
 from pathlib import Path
 
-import constants
-
 
 class BERTForClassification(tf.keras.Model):
 
@@ -56,13 +54,14 @@ class BERTForClassification(tf.keras.Model):
         """
 
         x = self.bert(inputs)[1]  # Extract the output from the second layer (sequence embedding)
+        
         # Classification head for multi-class classification
         x = self.dense1(x)
-        x = self.dropout1(x)
+        #x = self.dropout1(x)
         x = self.dense2(x)
-        x = self.dropout2(x)
+        #x = self.dropout2(x)
         x = self.dense3(x)
-        x = self.dropout3(x)
+        #x = self.dropout3(x)
         outputs = self.output_layer(x)
         return outputs
 
@@ -123,20 +122,24 @@ class BERTForClassification(tf.keras.Model):
         X_train_encoded = self.tokenize(X_train)
         X_test_encoded = self.tokenize(X_test)
 
+
+        print(X_train_encoded)
+        
+
         y_train_hot = tf.one_hot(y_train, depth=self.params["NUM_CLASSES"])
         y_test_hot = tf.one_hot(y_test, depth=self.params["NUM_CLASSES"])
 
-        # print model summary
-        self.summary()
 
         # Compile the Model
         self.compile(
-                    loss='categorical_crossentropy', 
+                    loss='binary_crossentropy', 
                     optimizer='adam', 
                     metrics=['accuracy']
                 )
         
         early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=3)
+        reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=10, verbose=1, mode='auto', min_delta=0.0001, cooldown=0, min_lr=0.00001)
+
         history = self.fit(
                         x=X_train_encoded, 
                         y=y_train_hot,

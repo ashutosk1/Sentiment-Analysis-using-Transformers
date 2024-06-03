@@ -1,3 +1,22 @@
+# PATHS
+DATA_PATH = "../SENTIMENT140_DATA_DIR/training.1600000.processed.noemoticon.csv"
+CORPUS_DIR = "../CORPUS_DATA_DIR"
+
+
+NUM_EXAMPLES = 100000
+# MODEL PARAMS
+PARAMS = { 
+    "TEST_SIZE"       : 0.20,
+    "BATCH_SIZE"      : 16,
+    "SEQ_LENGTH"      : 100,
+    "EPOCHS"          : 2,
+    "LEARNING_RATE"   : 1e-5,
+    "NUM_CLASSES"     : 2,
+    "MODEL_NAME"      : "bert-base-uncased",
+    "MODEL_DIR"       : "../MODEL_DIR"
+}
+
+
 #LIST OF EMOJIS WITH THEIR RESPECTIVE MEANINGS
 LIST_OF_EMOJIS = {
             ':)': 'smile', 
@@ -68,22 +87,3 @@ LIST_OF_REPLACED_LETTERS = {
                         "+": "plus",
                         "$": "dollar",
                     }
-
-
-# PATHS
-DATA_PATH = "../SENTIMENT140_DATA_DIR/training.1600000.processed.noemoticon.csv"
-CORPUS_DIR = "../CORPUS_DATA_DIR_NLTK"
-
-
-NUM_EXAMPLES = 100000
-# MODEL PARAMS
-PARAMS = { 
-    "TEST_SIZE"       : 0.20,
-    "BATCH_SIZE"      : 16,
-    "SEQ_LENGTH"      : 8,
-    "EPOCHS"          : 2,
-    "LEARNING_RATE"   : 1e-5,
-    "NUM_CLASSES"     : 2,
-    "MODEL_NAME"      : "bert-base-uncased",
-    "MODEL_DIR"       : "../MODEL_DIR"
-}

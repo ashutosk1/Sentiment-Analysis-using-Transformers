@@ -2,11 +2,10 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 import pandas as pd
-import nltk 
-nltk.download('stopwords')
-nltk.download('wordnet')
-nltk.download('punkt')
-
+# nltk.download('stopwords')
+# nltk.download('wordnet')
+# nltk.download('punkt')
+from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 import string
@@ -37,6 +36,7 @@ def preProcess(filepath, num_examples, shuffle_flag=True):
     
     # Shuffle the dataset to include both kinds of labels.
     if shuffle_flag:
+        print("Data is shuffled!")
         data = shuffle(data)
 
     # Extract the rows upto `num_examples`    
@@ -65,8 +65,6 @@ def preProcess(filepath, num_examples, shuffle_flag=True):
     7. ** Convert the message columns and sentiment labels in the form of lists. **
 
     """
-    lemmatizer = WordNetLemmatizer()
-    stop_words = set(stopwords.words('english'))
 
     def remove_username(text):
         pattern = r'@\w+'
@@ -80,17 +78,26 @@ def preProcess(filepath, num_examples, shuffle_flag=True):
         pattern = pattern = r'http\S+|www\.\S+'
         return re.sub(pattern, "", text)
 
+    def get_filtered_tokens(text):
+        lemmatizer = WordNetLemmatizer()
+        stop_words = stop_words = set(stopwords.words('english')) -{"no"}
+        text = text.lower()
+        text = text.translate(str.maketrans({key: None for key in string.punctuation}))  
+        tokens = word_tokenize(text)       
+        filtered_tokens = [token for token in tokens if token not in stop_words]  
+        filtered_tokens = [lemmatizer.lemmatize(token) for token in filtered_tokens]
+        return filtered_tokens
+
+    # preprocess
     data["message"] = data["message"].str.lower()
     data["message"] = data["message"].apply(lambda text: remove_username(text))
     data["message"] = data["message"].apply(lambda text: remove_hashtags(text))
     data["message"] = data["message"].apply(lambda text: remove_url(text))
-    data["message"] = data["message"].str.translate(str.maketrans({key: None for key in string.punctuation}))
-    data["message"] = data["message"].apply(lambda x: " ".join([lemmatizer.lemmatize(word) for word in x.split()\
-                                                                                if word not in stop_words]))
+    data["message"] = data["message"].apply(lambda text: get_filtered_tokens(text))
     return data["message"].tolist(), data["sentiment"].tolist()
 
     
-def load_or_preprocess_corpus(filepath, corpus_dir, num_examples, shuffle_flag = True, clear=True):
+def load_or_preprocess_corpus(filepath, corpus_dir, num_examples):
     """
     Loads the preprocessed corpus and labels from pickle files, or preprocesses the data if not found.
 
@@ -105,7 +112,6 @@ def load_or_preprocess_corpus(filepath, corpus_dir, num_examples, shuffle_flag =
             - preprocessed_corpus (list): List of preprocessed text messages.
             - sentiment_labels (list): List of sentiment labels.
     """
-
     # Create the corpus_dir if it doesn't exist
     os.makedirs(corpus_dir, exist_ok=True)
 
